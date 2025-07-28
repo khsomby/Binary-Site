@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  bedrock:
+    build: .
+    container_name: bedrock-server
+    environment:
+      EULA: "TRUE"
+      VERSION: "1.20.0.01"
+      SERVER_NAME: "SombyServer"
+      GAMEMODE: "survival"
+      DIFFICULTY: "normal"
+      ONLINE_MODE: "false"
+      ALLOW_CHEATS: "true"
+      MAX_PLAYERS: 100
+    ports:
+      - "19132:19132/udp"
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
