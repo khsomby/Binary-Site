@@ -1,18 +1,23 @@
-# Dockerfile pour Minecraft Bedrock 1.20.0.01
-FROM itzg/minecraft-bedrock-server:latest
+# Base image
+FROM node:18-slim
 
-# Configuration de la version, accepte l'EULA
-ENV VERSION=1.20.0.01
-ENV EULA=TRUE
-ENV GAMEMODE=survival
-ENV DIFFICULTY=normal
-ENV ONLINE_MODE=false
-ENV ALLOW_CHEATS=true
-ENV MAX_PLAYERS=10
-ENV SERVER_NAME="LiteGixServer"
+# Install ffmpeg
+RUN apt-get update && \
+    apt-get install -y ffmpeg && \
+    rm -rf /var/lib/apt/lists/*
 
-# Expose le port UDP 19132 (important pour Bedrock)
-EXPOSE 19132/udp
+# Set working directory
+WORKDIR /app
 
-# Utilisateur non root
-USER minecraft
+# Copy package files and install deps
+COPY package*.json ./
+RUN npm install --production
+
+# Copy source code
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Start app
+CMD ["npm", "start"]
