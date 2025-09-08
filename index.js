@@ -1,4 +1,4 @@
-const YT_URL = "https://www.youtube.com/live/Z7rtQEa62RI?si=NP4Hv2yirAy2hFGA";
+const YT_URL = "https://m.youtube.com/live/rEKifG2XUZg?feature=shared";
 
 const express = require("express");
 const fs = require("fs");
