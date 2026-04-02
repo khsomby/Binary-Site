@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>GenoDoc</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,244 +13,561 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(145deg, #f9fafb 0%, #ffffff 100%);
+            color: #111827;
+            scroll-behavior: smooth;
         }
 
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid #eef2ff;
+            padding: 1rem 2rem;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
         }
 
-        .header h1 {
-            font-size: 2em;
-            letter-spacing: 2px;
+        .nav-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        .header p {
-            opacity: 0.9;
-            margin-top: 5px;
-        }
-
-        .feed-container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .feed-card {
-            background: white;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .feed-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-
-        .card-header {
+        .logo-area {
             display: flex;
             align-items: center;
-            padding: 15px 20px;
-            background: #fafafa;
-            border-bottom: 1px solid #eee;
+            gap: 12px;
         }
 
-        .profile-symbol {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .logo-icon {
+            font-size: 2rem;
+            filter: drop-shadow(0 2px 4px rgba(59,130,246,0.2));
+        }
+
+        .logo-text {
+            font-size: 1.85rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2563eb, #7c3aed, #db2777);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .tagline {
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-weight: 500;
+            background: #f3f4f6;
+            padding: 4px 12px;
+            border-radius: 60px;
+        }
+
+        .logout-glass {
+            background: rgba(0,0,0,0.03);
+            backdrop-filter: blur(4px);
+            border: 1px solid #e5e7eb;
+            padding: 8px 20px;
+            border-radius: 50px;
+            color: #4b5563;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.25s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-glass:hover {
+            background: #1f2937;
+            color: white;
+            border-color: #6366f1;
+            transform: translateY(-2px);
+        }
+
+        .hero-banner {
+            background: linear-gradient(125deg, #eff6ff 0%, #f5f3ff 100%);
+            margin: 2rem 2rem 0 2rem;
+            border-radius: 48px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 8px 24px -12px rgba(0,0,0,0.08);
+        }
+
+        .hero-banner h2 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e40af, #6b21a5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-banner p {
+            color: #6b7280;
+            margin-top: 10px;
+            font-weight: 450;
+        }
+
+        .feed-grid {
+            max-width: 1280px;
+            margin: 3rem auto;
+            padding: 0 2rem 4rem 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 2rem;
+        }
+
+        .art-card {
+            background: #ffffff;
+            border-radius: 28px;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 12px 28px -12px rgba(0,0,0,0.1);
+            border: 1px solid #f0f2f5;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .art-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 36px -16px rgba(99,102,241,0.2);
+            border-color: #c7d2fe;
+        }
+
+        .card-media {
+            position: relative;
+            background: #faf9fe;
+            min-height: 260px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 20px;
-            margin-right: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
 
-        .uploader-info {
+        .feed-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
+
+        .art-card:hover .feed-img {
+            transform: scale(1.03);
+        }
+
+        .profile-badge-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 1rem 1.2rem;
+            background: #ffffff;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .avatar-symbol {
+            width: 48px;
+            height: 48px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            box-shadow: 0 6px 12px -8px #6366f1;
+            transition: 0.2s;
+        }
+
+        .identity {
             flex: 1;
         }
 
-        .uploader-name {
-            font-weight: bold;
-            font-size: 1.1em;
+        .display-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1f2937;
             display: flex;
             align-items: center;
             gap: 8px;
             flex-wrap: wrap;
         }
 
-        .badge {
-            background: #3b82f6;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 0.7em;
-            font-weight: normal;
-            letter-spacing: 0.5px;
+        .prestige-badge {
+            background: #eef2ff;
+            color: #4f46e5;
+            padding: 3px 10px;
+            border-radius: 40px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        .time {
-            font-size: 0.75em;
-            color: #888;
-            margin-top: 4px;
+        .prestige-badge:before {
+            content: "⚡";
+            font-size: 0.7rem;
         }
 
-        .feed-image {
-            width: 100%;
-            max-height: 500px;
-            object-fit: cover;
-            background: #f0f0f0;
+        .timestamp {
+            font-size: 0.68rem;
+            color: #9ca3af;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .description {
-            padding: 15px 20px;
-            line-height: 1.5;
-            color: #555;
-            border-top: 1px solid #eee;
-            background: white;
+        .caption-section {
+            padding: 1rem 1.2rem 1.3rem 1.2rem;
+            background: #ffffff;
+            font-size: 0.92rem;
+            line-height: 1.45;
+            color: #374151;
+            border-top: 1px solid #f9fafb;
+            font-weight: 450;
         }
 
-        .loading, .empty {
+        .empty-soul {
             text-align: center;
-            padding: 60px 20px;
-            color: #888;
+            padding: 4rem 2rem;
+            background: #fefce8;
+            border-radius: 48px;
+            margin: 2rem;
         }
 
-        .loading {
-            font-size: 1.2em;
+        .loading-vortex {
+            text-align: center;
+            padding: 5rem;
         }
 
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+        .pulse-ring {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1.5rem;
+            background: conic-gradient(from 0deg, #6366f1, #a855f7, #6366f1);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
+            animation: spinPulse 1s infinite linear;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes spin {
+        .pulse-ring:after {
+            content: "";
+            width: 44px;
+            height: 44px;
+            background: #ffffff;
+            border-radius: 50%;
+        }
+
+        @keyframes spinPulse {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #888;
-            font-size: 0.8em;
-            border-top: 1px solid #ddd;
-            margin-top: 40px;
+        .floating-controls {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99;
+            display: flex;
+            gap: 12px;
         }
 
-        @media (max-width: 600px) {
-            .feed-container {
-                margin: 20px auto;
-                padding: 0 15px;
+        .ctrl-btn {
+            background: #1f2937dd;
+            backdrop-filter: blur(16px);
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 60px;
+            color: #f3f4f6;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ctrl-btn:hover {
+            background: #6366f1;
+            color: white;
+            transform: scale(1.07);
+        }
+
+        .toast-luxe {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937e6;
+            backdrop-filter: blur(20px);
+            color: #f3f4f6;
+            padding: 10px 24px;
+            border-radius: 100px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            z-index: 200;
+            animation: floatToast 0.3s ease;
+            pointer-events: none;
+            letter-spacing: 0.3px;
+            border: 1px solid #818cf8;
+        }
+
+        @keyframes floatToast {
+            from { opacity: 0; bottom: 0px; }
+            to { opacity: 1; bottom: 30px; }
+        }
+
+        @media (max-width: 780px) {
+            .feed-grid {
+                grid-template-columns: 1fr;
+                padding: 0 1rem 2rem 1rem;
             }
-            
-            .uploader-name {
-                font-size: 1em;
+            .hero-banner {
+                margin: 1rem;
+                padding: 1.5rem;
             }
-            
-            .profile-symbol {
-                width: 40px;
-                height: 40px;
-                font-size: 18px;
+            .hero-banner h2 {
+                font-size: 1.6rem;
             }
+            .glass-nav {
+                padding: 1rem;
+            }
+            .logo-text {
+                font-size: 1.4rem;
+            }
+        }
+
+        .reaction-hint {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            margin-top: 8px;
+            display: flex;
+            gap: 12px;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>📸 GenoDoc</h1>
-        <p>Discover amazing moments shared by our community</p>
-    </div>
 
-    <div class="feed-container" id="feedContainer">
-        <div class="loading">
-            <div class="spinner"></div>
-            Loading amazing feeds...
+<div class="glass-nav">
+    <div class="nav-inner">
+        <div class="logo-area">
+            <span class="logo-icon">🌟</span>
+            <span class="logo-text">GenoDoc</span>
+            <span class="tagline">live vibrant • share joy</span>
         </div>
+        <a href="/logout" class="logout-glass">
+            <span>🚪</span> exit gallery
+        </a>
     </div>
+</div>
 
-    <div class="footer">
-        <p>© 2026 GenoDoc - Share your world</p>
+<div class="hero-banner">
+    <h2>Genocide Docs</h2>
+    <p>Every docs of Genocide</p>
+</div>
+
+<div class="feed-grid" id="feedGrid">
+    <div class="loading-vortex">
+        <div class="pulse-ring"></div>
+        <p style="color:#6b7280; font-weight:500;">loading ...</p>
     </div>
+</div>
 
-    <script>
-        async function fetchFeeds() {
-            const container = document.getElementById('feedContainer');
+<div class="floating-controls">
+    <button class="ctrl-btn" id="refreshBtn" title="refresh feed">↻</button>
+    <button class="ctrl-btn" id="topBtn" title="scroll up">↑</button>
+</div>
+
+<script>
+    const feedGrid = document.getElementById('feedGrid');
+    let refreshIntervalId = null;
+
+    function showLuxuryToast(msg, duration = 2200) {
+        let existing = document.querySelector('.toast-luxe');
+        if(existing) existing.remove();
+        let toast = document.createElement('div');
+        toast.className = 'toast-luxe';
+        toast.innerHTML = `✨ ${msg} ✨`;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 280);
+        }, duration);
+    }
+
+    function sanitizeText(raw) {
+        if(!raw) return '';
+        let txt = String(raw);
+        return txt.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function timeAura(isoString) {
+        if(!isoString) return 'just now';
+        let d = new Date(isoString);
+        if(isNaN(d.getTime())) return 'recently';
+        let now = new Date();
+        let diff = now - d;
+        let sec = Math.floor(diff / 1000);
+        let min = Math.floor(sec / 60);
+        let hrs = Math.floor(min / 60);
+        let days = Math.floor(hrs / 24);
+        if(sec < 10) return 'just now';
+        if(min < 1) return `${sec} seconds ago`;
+        if(min < 60) return `${min} minute${min > 1 ? 's' : ''} ago`;
+        if(hrs < 24) return `${hrs} hour${hrs > 1 ? 's' : ''} ago`;
+        if(days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+        return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    }
+
+    async function fetchAndRenderEternal() {
+        try {
+            const resp = await fetch('/api/feeds');
+            if(resp.status === 401) {
+                window.location.href = '/';
+                return;
+            }
+            if(!resp.ok) throw new Error(`server error ${resp.status}`);
             
-            try {
-                const response = await fetch('/api/feeds');
-                const feeds = await response.json();
+            const feeds = await resp.json();
+            if(!feeds || feeds.length === 0) {
+                feedGrid.innerHTML = `
+                    <div class="empty-soul" style="grid-column:1/-1;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📸</div>
+                        <h3 style="color:#4b5563;">no feed yet</h3>
+                        <p style="margin-top: 10px; color:#9ca3af;">be the first to share doc</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let cardsHtml = '';
+            for(let feed of feeds) {
+                let uploaderRaw = feed.uploader ? feed.uploader.trim() : 'wanderer';
+                let initialChar = uploaderRaw.charAt(0).toUpperCase();
+                let avatarLetter = (initialChar >= 'A' && initialChar <= 'Z') ? initialChar : '✨';
+                let imageSource = (feed.image && (feed.image.startsWith('http') || feed.image.startsWith('data:'))) ? feed.image : 'https://placehold.co/800x550/e0e7ff/4f46e5?text=image+preview';
+                let descRaw = feed.description ? feed.description : 'no description added';
+                let timeLabel = feed.time ? timeAura(feed.time) : 'recently';
                 
-                if (feeds.length === 0) {
-                    container.innerHTML = '<div class="empty">✨ No feeds yet. Be the first to share!</div>';
-                    return;
-                }
-
-                container.innerHTML = feeds.map(feed => {
-                    const initial = feed.uploader ? feed.uploader.charAt(0).toUpperCase() : '?';
-                    const time = feed.time ? new Date(feed.time).toLocaleString() : 'Just now';
-                    
-                    return `
-                        <div class="feed-card">
-                            <div class="card-header">
-                                <div class="profile-symbol">${initial}</div>
-                                <div class="uploader-info">
-                                    <div class="uploader-name">
-                                        ${escapeHtml(feed.uploader)}
-                                        <span class="badge">✓ Verified Creator</span>
-                                    </div>
-                                    <div class="time">📅 ${time}</div>
+                cardsHtml += `
+                    <div class="art-card" data-feed-id="${sanitizeText(feed.id || '')}">
+                        <div class="profile-badge-area">
+                            <div class="avatar-symbol">${sanitizeText(avatarLetter)}</div>
+                            <div class="identity">
+                                <div class="display-name">
+                                    ${sanitizeText(uploaderRaw)}
+                                    <span class="prestige-badge">creator</span>
+                                </div>
+                                <div class="timestamp">
+                                    <span>🕒</span> ${sanitizeText(timeLabel)}
                                 </div>
                             </div>
-                            <img class="feed-image" src="${escapeHtml(feed.image)}" alt="Upload from ${escapeHtml(feed.uploader)}" onerror="this.src='https://via.placeholder.com/600x400?text=Image+Not+Found'">
-                            <div class="description">
-                                💬 ${escapeHtml(feed.description)}
-                            </div>
                         </div>
-                    `;
-                }).join('');
-                
-            } catch (error) {
-                console.error('Error fetching feeds:', error);
-                container.innerHTML = '<div class="empty">⚠️ Failed to load feeds. Please try again later.</div>';
+                        <div class="card-media">
+                            <img class="feed-img" 
+                                 src="${sanitizeText(imageSource)}" 
+                                 alt="shared moment"
+                                 loading="lazy"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/800x550/c7d2fe/4f46e5?text=image+unavailable';">
+                        </div>
+                        <div class="caption-section">
+                            <span style="opacity:0.6;">💬</span> ${sanitizeText(descRaw)}>
+                        </div>
+                    </div>
+                `;
             }
+            
+            feedGrid.innerHTML = cardsHtml;
+            showLuxuryToast(`${feeds.length} vibrant moments loaded`, 1600);
+        } catch(err) {
+            console.error('fetch error', err);
+            feedGrid.innerHTML = `
+                <div class="empty-soul" style="grid-column:1/-1; border-left: 4px solid #f97316;">
+                    <p style="color:#ea580c;">⚠️ couldn't load feed</p>
+                    <button onclick="window.fetchAndRenderEternal()" style="margin-top:20px; background:#6366f1; border:none; padding:10px 28px; border-radius:40px; color:white; font-weight:600; cursor:pointer;">⟳ retry</button>
+                </div>
+            `;
         }
+    }
 
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
+    function initAutoRefresh() {
+        if(refreshIntervalId) clearInterval(refreshIntervalId);
+        refreshIntervalId = setInterval(() => {
+            fetchAndRenderEternal().catch(e => console.warn('auto refresh', e));
+        }, 30000);
+    }
 
-        fetchFeeds();
+    document.getElementById('refreshBtn')?.addEventListener('click', () => {
+        fetchAndRenderEternal();
+        showLuxuryToast('refreshing feed', 1200);
+    });
+    
+    document.getElementById('topBtn')?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        showLuxuryToast('back to top', 800);
+    });
 
-        setInterval(fetchFeeds, 30000);
-    </script>
+    window.fetchAndRenderEternal = fetchAndRenderEternal;
+    
+    window.addEventListener('load', async () => {
+        await fetchAndRenderEternal();
+        initAutoRefresh();
+        
+        let wasOnline = true;
+        window.addEventListener('online', () => {
+            if(!wasOnline) {
+                showLuxuryToast('connection restored', 1500);
+                fetchAndRenderEternal();
+            }
+            wasOnline = true;
+        });
+        window.addEventListener('offline', () => {
+            wasOnline = false;
+            showLuxuryToast('offline mode', 1500);
+        });
+        
+        const styleGlow = document.createElement('style');
+        styleGlow.textContent = `
+            .feed-img {
+                transition: all 0.4s ease;
+            }
+            .art-card:hover .feed-img {
+                filter: brightness(1.01) saturate(1.02);
+            }
+            .reaction-hint span {
+                cursor: default;
+                opacity: 0.6;
+                transition: 0.1s;
+            }
+            .reaction-hint span:hover {
+                opacity: 1;
+                color: #6366f1;
+            }
+        `;
+        document.head.appendChild(styleGlow);
+    });
+</script>
 </body>
 </html>
