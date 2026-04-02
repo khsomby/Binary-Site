@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenoDoc</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .feed-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .feed-card {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feed-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background: #fafafa;
+            border-bottom: 1px solid #eee;
+        }
+
+        .profile-symbol {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .uploader-info {
+            flex: 1;
+        }
+
+        .uploader-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: #3b82f6;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: normal;
+            letter-spacing: 0.5px;
+        }
+
+        .time {
+            font-size: 0.75em;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .feed-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            background: #f0f0f0;
+        }
+
+        .description {
+            padding: 15px 20px;
+            line-height: 1.5;
+            color: #555;
+            border-top: 1px solid #eee;
+            background: white;
+        }
+
+        .loading, .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .loading {
+            font-size: 1.2em;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 0.8em;
+            border-top: 1px solid #ddd;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 600px) {
+            .feed-container {
+                margin: 20px auto;
+                padding: 0 15px;
+            }
+            
+            .uploader-name {
+                font-size: 1em;
+            }
+            
+            .profile-symbol {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📸 GenoDoc</h1>
+        <p>Discover amazing moments shared by our community</p>
+    </div>
+
+    <div class="feed-container" id="feedContainer">
+        <div class="loading">
+            <div class="spinner"></div>
+            Loading amazing feeds...
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 GenoDoc - Share your world</p>
+    </div>
+
+    <script>
+        async function fetchFeeds() {
+            const container = document.getElementById('feedContainer');
+            
+            try {
+                const response = await fetch('/api/feeds');
+                const feeds = await response.json();
+                
+                if (feeds.length === 0) {
+                    container.innerHTML = '<div class="empty">✨ No feeds yet. Be the first to share!</div>';
+                    return;
+                }
+
+                container.innerHTML = feeds.map(feed => {
+                    const initial = feed.uploader ? feed.uploader.charAt(0).toUpperCase() : '?';
+                    const time = feed.time ? new Date(feed.time).toLocaleString() : 'Just now';
+                    
+                    return `
+                        <div class="feed-card">
+                            <div class="card-header">
+                                <div class="profile-symbol">${initial}</div>
+                                <div class="uploader-info">
+                                    <div class="uploader-name">
+                                        ${escapeHtml(feed.uploader)}
+                                        <span class="badge">✓ Verified Creator</span>
+                                    </div>
+                                    <div class="time">📅 ${time}</div>
+                                </div>
+                            </div>
+                            <img class="feed-image" src="${escapeHtml(feed.image)}" alt="Upload from ${escapeHtml(feed.uploader)}" onerror="this.src='https://via.placeholder.com/600x400?text=Image+Not+Found'">
+                            <div class="description">
+                                💬 ${escapeHtml(feed.description)}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Error fetching feeds:', error);
+                container.innerHTML = '<div class="empty">⚠️ Failed to load feeds. Please try again later.</div>';
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        fetchFeeds();
+
+        setInterval(fetchFeeds, 30000);
+    </script>
+</body>
+</html>
